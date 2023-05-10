@@ -8,7 +8,8 @@ class user_group_create(generics.CreateAPIView):
     serializer_class = group_user_serializer
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(creator=self.request.user)
+
 
 class user_group_datail_edit(generics.RetrieveUpdateDestroyAPIView):
     queryset = group_user.objects.all()

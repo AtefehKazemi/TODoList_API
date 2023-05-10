@@ -3,12 +3,13 @@ from .models import group_user
 
 
 class group_user_serializer(serializers.ModelSerializer):
-    author_username = serializers.SerializerMethodField()
+    creator_username = serializers.SerializerMethodField()
 
     class Meta:
         model = group_user
-        exclude = ('author',)
-        include = ('author_username',)
+        fields = '__all__'
+        read_only = ('creator',)
+        include = ('creator_username',)
 
-    def get_author_username(self, obj):
+    def get_creator_username(self, obj):
         return obj.get_username()
