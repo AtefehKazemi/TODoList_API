@@ -5,7 +5,7 @@ from django.dispatch import receiver
 
 
 class group_user(models.Model):
-    author = models.ForeignKey(User, related_name= 'created_group_user', on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(User, related_name= 'created_group_user', on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     members = models.ManyToManyField(User, related_name= 'group_user')
     description = models.TextField(blank=True, default='')
