@@ -1,11 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User
-from user_groups.models import group_user
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 
+
+class group_user(models.Model):
+    creator = models.ForeignKey(User, related_name= 'created_group_user', on_delete=models.CASCADE , editable = False)
+    name = models.CharField(max_length=30)
+    members = models.ManyToManyField(User, related_name= 'group_user')
+    description = models.TextField(blank=True, default='')
+
+    def __str__(self):
+        return self.name
+
+    def number_of_members(self):
+        return self.members.count()
+
+    def get_username(self):
+        return self.creator.username
+    
 
 class task(models.Model):
     parent = models.ForeignKey('self', blank=True, null=True, related_name='subtasks', on_delete=models.CASCADE)
@@ -13,7 +26,7 @@ class task(models.Model):
     title = models.CharField(max_length=30)
     task_groups = models.ManyToManyField(group_user, blank=True)
     description = models.TextField(blank=True, default='')
-    due_date = models.DateTimeField(auto_now_add=False)
+    due_date = models.DateTimeField(auto_now_add=False, null = True, blank = True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -54,3 +67,16 @@ class comment(models.Model):
             return False
         return True
         '''
+    
+
+class notification(models.Model):
+    receiver = models.ForeignKey(User, related_name='notification', on_delete=models.CASCADE)
+    is_read = models.BooleanField(default=False)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta :
+        ordering = ('-timestamp',)
+
+    def __str__(self):
+        return self.receiver.username

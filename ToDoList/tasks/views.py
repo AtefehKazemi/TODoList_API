@@ -1,8 +1,8 @@
-from .models import task, comment
-from .serializers import task_serializer_detail_edit, task_create_serializer, comment_serializer_view, comment_serializer_create_and_edit
+from .models import task, comment, group_user
+from .serializers import task_serializer_detail_edit, task_create_serializer, comment_serializer_view, comment_serializer_create_and_edit, group_user_serializer
 from rest_framework import generics
 from django.contrib.auth.models import User
-from user_groups.models import group_user
+#from user_groups.models import group_user
 from django.db.models import Q
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -70,3 +70,16 @@ class comment_detail(generics.RetrieveAPIView):
 class comment_edit(generics.RetrieveUpdateDestroyAPIView):
     queryset = comment.objects.all()
     serializer_class = comment_serializer_create_and_edit
+
+
+# group_user views:
+class user_group_create(generics.CreateAPIView):
+    serializer_class = group_user_serializer
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
+
+
+class user_group_datail_edit(generics.RetrieveUpdateDestroyAPIView):
+    queryset = group_user.objects.all()
+    serializer_class = group_user_serializer

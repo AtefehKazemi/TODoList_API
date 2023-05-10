@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import task, comment
+from .models import task, comment, notification, group_user
 from django.utils import timezone
 
-
+# task serializers:
 def validate_due_date(value):
     if value <= timezone.now():
         raise serializers.ValidationError("Due date : The Due date must be in the future.")
@@ -38,6 +38,7 @@ class task_create_serializer(serializers.ModelSerializer):
         fields = ['id', 'parent', 'title', 'task_groups', 'description', 'due_date']
 
 
+# comment serializers:
 # used for viewing a comment's details
 class comment_serializer_view(serializers.ModelSerializer):
     replies = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -69,3 +70,25 @@ class comment_serializer_create_and_edit(serializers.ModelSerializer):
     class Meta:
         model = comment
         fields = ('id','content','related_task', 'parent', 'created_at')
+
+
+# notification serializer:
+class notification_serializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = notification
+        fields = '__all__'
+
+
+# user_groups serializer:
+class group_user_serializer(serializers.ModelSerializer):
+    creator_username = serializers.SerializerMethodField()
+
+    class Meta:
+        model = group_user
+        fields = '__all__'
+        read_only = ('creator',)
+        include = ('creator_username',)
+
+    def get_creator_username(self, obj):
+        return obj.get_username()
