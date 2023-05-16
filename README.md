@@ -9,4 +9,4 @@ The features that this app provides sofar are:
 4. comment system for tasks
 5. comments CRUD
 6. automatic notifications for added users to/removed users from groups
-7 notifications CRUD
+7. notifications CRUD
