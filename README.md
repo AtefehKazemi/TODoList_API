@@ -1,7 +1,7 @@
 # TODoList_API
 
 Its a DRF project that users can use for handling their tasks.
-The features that this app provides sofar are:
+The features that this app provides so far in general are:
 1. create, edit, delete groups of desired users
 2. assigne tasks to groups
 3. create, edit, delete tasks 
