@@ -21,19 +21,19 @@ def  group_user_members_changed(sender, **kwargs):
     elif action is 'post_add':
         for i in pk_set:
             if  i != instance.creator.id:
-                notification_instance = notification.objects.create(receiver=User.objects.get(id=i), is_read=False,
+                notification_instance = notification.objects.create(receiver=User.objects.get(id = i), is_read=False,
                                                                 message='You are added to group ' + instance.name)
                 notification_instance.save()
     elif action == "post_remove":
         for i in pk_set:
             if  i != instance.creator.id:
-                notification_instance = notification.objects.create(receiver=User.objects.get(id=i), is_read=False,
+                notification_instance = notification.objects.create(receiver=User.objects.get(id = i), is_read=False,
                                                                     message='You are removed from group ' + instance.name)
                 notification_instance.save()
 
 
 '''
-<<<<WORK ON LATER>>>
+<<<<WORK ON IT LATER>>>
 @receiver(m2m_changed, sender = task.task_groups.through)
 def task_task_groups_changed(sender, **kwargs):
     instance = kwargs.pop('instance', None)
