@@ -7,7 +7,7 @@ from django.db.models import Q
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-#from django.core.cache import cache
+from django.core.cache import cache
 
 
 # task views:
@@ -41,7 +41,7 @@ class task_list(generics.ListAPIView):
         queryset = task.objects.filter(Q(author=self.request.user.id) | Q(task_groups__in = user_groups)).distinct()
         return queryset
     
-    '''
+    
     def list(self, request, *args, **kwargs):
         key = 'task_list'
         data = cache.get(key)
@@ -50,8 +50,10 @@ class task_list(generics.ListAPIView):
             response = super().list(request, *args, **kwargs)
             data = response.data
             cache.set(key, data, 300)
+        else:
+            print("*************from cache************")
         return Response(data)
-'''
+
 
 # used for creating a new task
 class task_create(generics.CreateAPIView):
