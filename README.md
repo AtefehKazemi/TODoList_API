@@ -1,4 +1,4 @@
-# TODoList_API
+# TODoList_API (pet project)
 
 Its a DRF project that users can use for handling their tasks.
 
@@ -9,7 +9,7 @@ django-rest-auth    0.9.5<br />
 djangorestframework 3.14.0<br />
 redis               4.5.5<br />
 <h1>Features:</h1>
-Features that this app provides so far in general are:<br />
+Features that this app provides so far in general:<br />
 1. create, edit, delete groups of desired users<br />
 2. assigne tasks to groups<br />
 3. create, edit, delete tasks<br />
