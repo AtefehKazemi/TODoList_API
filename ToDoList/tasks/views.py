@@ -8,7 +8,25 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.core.cache import cache
+from functools import wraps
 
+
+# cache function
+def cache_response(key_prefix):
+    def decorator(view_func):
+        @wraps(view_func)
+        def wrapper(view_instance, request, *args, **kwargs):
+            cache_key = f"{key_prefix}:{request.get_full_path()}"
+            cached_response = cache.get(cache_key)
+            if cached_response is not None:
+                print("*************from cache************")
+                return cached_response
+            print("*************no  cache************")
+            response = view_func(view_instance, request, *args, **kwargs)
+            cache.set(cache_key, response)
+            return response
+        return wrapper
+    return decorator
 
 # task views:
 
@@ -29,8 +47,8 @@ class task_view_edit(generics.RetrieveUpdateDestroyAPIView):
 # used for viewing a user's tasks list
 # user may be task author or in one of its groups members
 class task_list(generics.ListAPIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    #authentication_classes = [SessionAuthentication, BasicAuthentication]
+    #permission_classes = [IsAuthenticated]
     serializer_class = task_serializer_detail_edit
 
     # group objects that requested user is a member of, are filtered
@@ -41,7 +59,7 @@ class task_list(generics.ListAPIView):
         queryset = task.objects.filter(Q(author=self.request.user.id) | Q(task_groups__in = user_groups)).distinct()
         return queryset
     
-    
+    '''
     def list(self, request, *args, **kwargs):
         key = 'task_list'
         data = cache.get(key)
@@ -53,6 +71,11 @@ class task_list(generics.ListAPIView):
         else:
             print("*************from cache************")
         return Response(data)
+    '''
+
+    @cache_response(key_prefix='myapp:tasklistview')
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 # used for creating a new task
