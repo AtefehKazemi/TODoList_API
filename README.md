@@ -2,22 +2,22 @@
 
 Its a DRF project that users can use for handling their tasks.
 
-Installations:
-Django              4.2
-django-redis        5.3.0
-django-rest-auth
-djangorestframework 3.14.0
-redis               4.5.5
+<h1>Installations:</h1>
+Django              4.2<br />
+django-redis        5.3.0<br />
+django-rest-auth<br />
+djangorestframework 3.14.0<br />
+redis               4.5.5<br />
+<h1>Features:</h1>
+Features that this app provides so far in general are:<br />
+1. create, edit, delete groups of desired users<br />
+2. assigne tasks to groups<br />
+3. create, edit, delete tasks<br />
+(Each user can edit/delete a task only if is the creator of that or is a member of one of task's assigned groups)<br />
+4. comment system for tasks<br />
+5. comments CRUD<br />
+6. automatic notifications for added users to/removed users from groups<br />
+7. notifications CRUD<br />
 
-Features that this app provides so far in general are:
-1. create, edit, delete groups of desired users
-2. assigne tasks to groups
-3. create, edit, delete tasks 
-(Each user can edit/delete a task only if is the creator of that or is a member of one of task's assigned groups)
-4. comment system for tasks
-5. comments CRUD
-6. automatic notifications for added users to/removed users from groups
-7. notifications CRUD
-
--> Used some signals to handle m2m field changes
+-> Used some signals to handle m2m field changes<br />
 -> Added a custom middleware for caching (redis)
