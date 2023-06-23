@@ -5,7 +5,7 @@ Its a DRF project that users can use for handling their tasks.
 <h1>Installations:</h1>
 Django              4.2<br />
 django-redis        5.3.0<br />
-django-rest-auth<br />
+django-rest-auth    0.9.5<br />
 djangorestframework 3.14.0<br />
 redis               4.5.5<br />
 <h1>Features:</h1>
