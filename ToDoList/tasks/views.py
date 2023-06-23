@@ -6,27 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from django.core.cache import cache
-from functools import wraps
 
-
-# cache function
-def cache_response(key_prefix):
-    def decorator(view_func):
-        @wraps(view_func)
-        def wrapper(view_instance, request, *args, **kwargs):
-            cache_key = f"{key_prefix}:{request.get_full_path()}"
-            cached_response = cache.get(cache_key)
-            if cached_response is not None:
-                print("*************from cache************")
-                return cached_response
-            print("*************no  cache************")
-            response = view_func(view_instance, request, *args, **kwargs)
-            cache.set(cache_key, response)
-            return response
-        return wrapper
-    return decorator
 
 # task views:
 
@@ -58,24 +38,6 @@ class task_list(generics.ListAPIView):
         user_groups = group_user.objects.filter(members=self.request.user.id)
         queryset = task.objects.filter(Q(author=self.request.user.id) | Q(task_groups__in = user_groups)).distinct()
         return queryset
-    
-    '''
-    def list(self, request, *args, **kwargs):
-        key = 'task_list'
-        data = cache.get(key)
-        if not data:
-            print("****************no cache*****************")
-            response = super().list(request, *args, **kwargs)
-            data = response.data
-            cache.set(key, data, 300)
-        else:
-            print("*************from cache************")
-        return Response(data)
-    '''
-
-    @cache_response(key_prefix='myapp:tasklistview')
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
 
 
 # used for creating a new task
